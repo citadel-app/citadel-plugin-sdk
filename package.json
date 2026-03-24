@@ -21,11 +21,14 @@
     "registry": "https://npm.pkg.github.com/",
     "access": "public"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -b && vite build"
   },
   "dependencies": {
-    "@citadel-app/core": "^1.0.1"
+    "@citadel-app/core": "^1.0.3"
   },
   "devDependencies": {
     "typescript": "^5.5.3",

@@ -9,11 +9,14 @@ export type {
     ExternalDataHandler,
     NavigationItem,
     SidebarItem,
-    SettingsPanel,
     ScopedAPI,
     CoreServices,
     ModuleDefinition,
     WorkspaceContext
 } from '@citadel-app/core';
 
-export const __sdkVersion = "1.0.0";
+export * from './plugin-base';
+export * from './main';
+export * from './renderer';
+
+export const __sdkVersion = "1.1.0";

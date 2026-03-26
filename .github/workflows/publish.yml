@@ -28,6 +28,7 @@ jobs:
         run: npm install --legacy-peer-deps
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
           CITADEL_RELEASE_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
 
       - name: Build SDK
@@ -38,3 +39,4 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
+          CITADEL_RELEASE_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}

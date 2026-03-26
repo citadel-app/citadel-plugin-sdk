@@ -3,8 +3,9 @@ name: Publish SDK
 on:
   release:
     types: [published]
+  repository_dispatch:
+    types: [trigger-publish]
   workflow_dispatch:
-
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 

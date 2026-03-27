@@ -22,7 +22,6 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps --no-package-lock
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN }}
           CITADEL_RELEASE_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN }}
 

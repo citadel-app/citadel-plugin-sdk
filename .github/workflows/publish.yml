@@ -27,7 +27,6 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps --no-package-lock
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
           CITADEL_RELEASE_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
 
@@ -37,6 +36,5 @@ jobs:
       - name: Publish SDK
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
           CITADEL_RELEASE_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}

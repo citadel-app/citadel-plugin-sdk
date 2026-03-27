@@ -39,5 +39,5 @@ jobs:
       - name: Publish SDK
         run: npm publish
         env:
-          CITADEL_RELEASE_TOKEN: ${{ steps.app-token.outputs.token }}
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          CITADEL_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

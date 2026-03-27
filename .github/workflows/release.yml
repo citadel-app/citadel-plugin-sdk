@@ -21,7 +21,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: citadel-app
-          repositories: citadel-plugin-sdk
+          repositories: citadel,citadel-plugin-sdk
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

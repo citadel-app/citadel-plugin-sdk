@@ -27,7 +27,7 @@ export interface PluginConfig<T = any> {
 export function definePlugin<T = any>(config: PluginConfig<T>): IModule {
     return {
         id: config.id,
-        version: config.version || '1.0.0',
+        version: config.version || '1.1.1',
         ipcs: config.main?.ipcs ? Object.keys(config.main.ipcs) : [],
         
         onMainActivate: async (registrar: MainRegistrar, workspace: WorkspaceContext | null) => {

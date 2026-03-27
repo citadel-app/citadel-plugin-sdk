@@ -19,4 +19,4 @@ export * from './plugin-base';
 export * from './main';
 export * from './renderer';
 
-export const __sdkVersion = "1.1.0";
+export const __sdkVersion = "1.1.1";

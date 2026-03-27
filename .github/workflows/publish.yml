@@ -17,18 +17,21 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+      - name: Generate Token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://npm.pkg.github.com/'
-          scope: '@citadel-app'
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps --no-package-lock
         env:
-          GITHUB_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
-          CITADEL_RELEASE_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
+          CITADEL_RELEASE_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Build SDK
         run: npm run build
@@ -36,5 +39,5 @@ jobs:
       - name: Publish SDK
         run: npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
-          CITADEL_RELEASE_TOKEN: ${{ secrets.CITADEL_RELEASE_TOKEN}}
+          CITADEL_RELEASE_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}

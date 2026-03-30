@@ -4,19 +4,28 @@ export interface PluginConfig<T = any> {
     id: string;
     version?: string;
     main?: {
+        providesIpcs?: string[];
         ipcs?: Record<string, (registrar: MainRegistrar, ...args: any[]) => Promise<any> | any>;
         sidecars?: any[];
         onActivate?: (registrar: MainRegistrar, workspace: WorkspaceContext | null) => Promise<void> | void;
     };
+
     renderer?: {
         sidebar?: any[];
         navigation?: any[];
         routes?: { path: string, component: any }[];
         settingsConfig?: any;
         providers?: { entry: any, component: any }[];
+        globalComponents?: { region: string, component: any }[];
+        contentModules?: Record<string, any>;
+        contentViewers?: Record<string, any>;
+        sectionEditors?: Record<string, any>;
+        sectionTemplates?: any[];
+        statusWidgets?: { id: string, group: string, component: any }[];
+        externalDataHandlers?: any[];
         linkSearchProviders?: any[];
         crossLinkHandlers?: any[];
-        onActivate?: (registrar: RendererRegistrar) => Promise<void> | void;
+        onActivate?: (registrar: RendererRegistrar, api: any) => Promise<void> | void;
     };
 }
 
@@ -28,7 +37,26 @@ export function definePlugin<T = any>(config: PluginConfig<T>): IModule {
     return {
         id: config.id,
         version: config.version || '1.1.1',
-        ipcs: config.main?.ipcs ? Object.keys(config.main.ipcs) : [],
+        ipcs: config.main?.providesIpcs || (config.main?.ipcs ? Object.keys(config.main.ipcs) : []),
+        sidecars: config.main?.sidecars || [],
+        permissions: {
+            ipc: config.main?.ipcs ? Object.keys(config.main.ipcs) : []
+        },
+
+        // --- Declarative UI mappings ---
+        contentModules: config.renderer?.contentModules,
+        contentViewers: config.renderer?.contentViewers,
+        sectionEditors: config.renderer?.sectionEditors,
+        sectionTemplates: config.renderer?.sectionTemplates,
+        statusWidgets: config.renderer?.statusWidgets,
+        globalComponents: config.renderer?.globalComponents,
+        sidebarItems: config.renderer?.sidebar,
+        navigationItems: config.renderer?.navigation,
+        providers: config.renderer?.providers,
+        linkSearchProviders: config.renderer?.linkSearchProviders,
+        crossLinkHandlers: config.renderer?.crossLinkHandlers,
+        externalDataHandlers: config.renderer?.externalDataHandlers,
+
         
         onMainActivate: async (registrar: MainRegistrar, workspace: WorkspaceContext | null) => {
             // 1. Register Sidecars
@@ -65,11 +93,18 @@ export function definePlugin<T = any>(config: PluginConfig<T>): IModule {
             if (config.renderer?.providers) {
                 config.renderer.providers.forEach(p => registrar.registerProvider(p.entry, p.component));
             }
+            if (config.renderer?.globalComponents) {
+                config.renderer.globalComponents.forEach(c => registrar.registerGlobalComponent(c.region, c.component));
+            }
             if (config.renderer?.linkSearchProviders) {
                 config.renderer.linkSearchProviders.forEach(p => registrar.registerLinkSearchProvider(p));
             }
             if (config.renderer?.crossLinkHandlers) {
                 config.renderer.crossLinkHandlers.forEach(h => registrar.registerCrossLinkHandler(h));
+            }
+
+            if (config.renderer?.externalDataHandlers) {
+                config.renderer.externalDataHandlers.forEach(h => registrar.registerExternalDataHandler(h));
             }
 
             // 3. Settings
@@ -79,7 +114,7 @@ export function definePlugin<T = any>(config: PluginConfig<T>): IModule {
 
             // 4. Custom activation
             if (config.renderer?.onActivate) {
-                await config.renderer.onActivate(registrar);
+                await config.renderer.onActivate(registrar, (registrar as any).api || {});
             }
         }
     } as any;
